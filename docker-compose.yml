@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  asterisk-lab:
+    container_name: asterisk-lab
+    image: andrius/asterisk:latest
+    restart: unless-stopped
+
+    # Puertos necesarios:
+    # - 5060/udp  → SIP para MicroSIP
+    # - 8088/tcp  → ARI/HTTP para el ai-engine
+    # - 10000-10100/udp → RTP
+    ports:
+      - "5060:5060/udp"
+      - "8088:8088/tcp"
+      - "10000-10100:10000-10100/udp"
+
+    environment:
+      # No es estrictamente obligatorio si ya pusimos rtp.conf,
+      # pero ayuda a mantener todo consistente.
+      - AST_PBX_RTP_START=10000
+      - AST_PBX_RTP_END=10100
+
+    volumes:
+      # Configuración de Asterisk (ari.conf, pjsip.conf, extensions.conf, etc.)
+      - ./asterisk-conf:/etc/asterisk
+      # Carpeta para audios generados (fallback o pruebas)
+      - ./asterisk_media:/var/lib/asterisk/sounds/ai-generated
+
+    networks:
+      - voice_net
+
+networks:
+  voice_net:
+    external: true

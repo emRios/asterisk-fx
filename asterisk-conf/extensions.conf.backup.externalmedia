@@ -874,16 +874,6 @@ exten => 6001,1,NoOp(Llamada directa a 6001)
 exten => 700,1,NoOp(AI Agent Test - Enviando a from-ai-agent-test)
  same => n,Goto(from-ai-agent-test,s,1)
 
-
-; Extensión de prueba para el AI Agent (AudioSocket)
-exten => 701,1,NoOp(AudioSocket TEST Deepgram Prospectador)
- same => n,Set(AI_PROVIDER=deepgram)
- same => n,Set(AI_CONTEXT=prospectador_clientes_tc)
- same => n,Answer()
- same => n,Stasis(asterisk-ai-voice-agent)
- same => n,Hangup()
-
-
 [from-ai-agent-test]
 exten => s,1,NoOp(AI TEST Deepgram Prospectador)
  same => n,Set(AI_PROVIDER=deepgram)
